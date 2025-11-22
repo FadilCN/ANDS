@@ -15,10 +15,6 @@ Comprehensive computer vision-based ADAS prototype implementing lane detection, 
 
 ---
 
-<img src="images/Picture1.jpg" width="800" height="450"/>
-<img src="images/Picture2.jpg" width="800" height="450"/>
-<img src="images/Picture3.jpg" width="800" height="450"/>
-
 ## 📱 Demo
 
 **Automatic Headlight Dimming System** - Detects oncoming headlights at night using OpenCV contour detection and brightness thresholding.
@@ -48,14 +44,21 @@ Comprehensive computer vision-based ADAS prototype implementing lane detection, 
 
 ## 🏗️ System Architecture
 
-[Camera Feed] → [Preprocessing] → [Lane Detection] → [Vehicle Detection] → [Decision Logic] → [Overlay Warnings]
-↓ ↓ ↓ ↓ ↓
-Resize Canny Edges Hough Transform YOLO/Object Alert Generation
-ROI Crop Gaussian Blur Perspective Warp Detector Bounding Boxes
+**Complete hardware + software ADAS system** with automatic headlight control and multi-sensor integration.
 
-text
+![System Architecture](images/Picture4.jpg) [attached_image:1]
 
-![Architecture Diagram](docs/images/architecture.png)
+### Hardware Components
+| Module | Purpose | Interface |
+|--------|---------|-----------|
+| **Raspberry Pi** | CV processing + control logic | GPIO/I2C |
+| **Camera** | Night driving feed | USB/MIPI |
+| **Headlight Relay** | Auto dim/bright | GPIO |
+| **Rain Sensor** | Weather detection | GPIO |
+| **Accelerometer** | Vehicle dynamics | I2C |
+| **GSM/WiFi + GPS** | Location & remote alerts | UART/USB |
+
+### Processing Pipeline
 
 ---
 

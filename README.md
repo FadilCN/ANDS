@@ -18,6 +18,8 @@ Comprehensive computer vision-based ADAS prototype implementing lane detection, 
 ## 📱 Demo
 
 <img src="images/Picture1.jpg" width="800" height="450"/>
+<img src="images/Picture2.jpg" width="800" height="450"/>
+<img src="images/Picture3.jpg" width="800" height="450"/>
 
 Add your presentation screenshots here after exporting them:
 

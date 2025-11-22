@@ -38,9 +38,9 @@ Comprehensive computer vision-based ADAS prototype implementing lane detection, 
 
 ### 🧠 How It Works (3-Step Pipeline)
 
-1. **Road ROI Masking** → Focus on driving area, ignore dashboard/hood [attached_image:2]
-2. **Brightness Thresholding** → Detect bright headlight regions (> threshold) [attached_image:2]
-3. **Contour Detection** → Identify and validate oncoming vehicle headlights [attached_image:1][attached_image:2]
+1. **Road ROI Masking** → Focus on driving area, ignore dashboard/hood
+2. **Brightness Thresholding** → Detect bright headlight regions (> threshold) 
+3. **Contour Detection** → Identify and validate oncoming vehicle headlights
 
 ## 🏗️ System Architecture
 

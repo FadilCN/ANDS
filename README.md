@@ -93,7 +93,6 @@ git clone https://github.com/LijazS/ADAS.git
 cd ADAS
 pip install -r requirements.txt
 
-text
 
 ### Usage
 
@@ -109,17 +108,14 @@ text
 ## 📁 Project Structure
 
 ADAS/
-├── src/ # Source code
-│ ├── main.py # Entry point
-│ ├── detection.py # Headlight detection logic
-│ ├── relay.py # GPIO / relay control
-│ └── utils.py
-├── docs/
-│ └── images/ # Architecture + demo screenshots
-├── data/ # Sample images / videos (optional)
-├── Presentation.pdf # Project slides
+├── src/
+│ ├── main.py
+│ ├── detection.py
+│ └── relay.py
+├── docs/images/ # Demo screenshots
+├── data/ # Test images/videos
 ├── requirements.txt
-└── README.md
+└── Presentation.pdf
 
 text
 

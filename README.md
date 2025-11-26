@@ -104,6 +104,7 @@ The Raspberry Pi acts as the central hub connecting the Camera, Accelerometer, G
 <img src="images/5.png" alt="Internal Circuit Diagram" width="600">
 <img src="images/5.1.png" alt="Internal Circuit Diagram" width="600">
 </p>
+
 ### External Wiring
 Shows the connection between the 12V Car Battery, the Buck Converter, the Relay, and the Headlights.
  <p align="center"> 

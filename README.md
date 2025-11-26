@@ -1,139 +1,129 @@
-# Advanced Driver Assistance System (ADAS) [web:1][web:17]
+# Advanced Driver Support System (ADSS)
+Department of Computer Science and Engineering | College of Engineering Thalassery
 
-Comprehensive computer vision-based ADAS prototype implementing lane detection, vehicle detection, and driver safety warnings using OpenCV and classical image processing techniques.[web:9][web:17]
+## Project Overview
+The Advanced Driver Support System is an AI-powered device designed to enhance driving safety and convenience using a Raspberry Pi 5B. This system addresses critical road safety challenges such as headlight glare, accident detection, and lack of real-time incident documentation. By integrating computer vision and sensor data, ADSS provides an intuitive and automated driving assistance experience.
 
-> 📊 **Project Presentation**: [Presentation.pdf](./Presentation.pdf)
+## Key Features
 
----
+**Automatic Headlight Beam Controller:** Dynamically switches between high and low beams based on oncoming traffic to reduce glare.
 
-## 🚀 Features
+**Intelligent Dashcam:** Continuous footage recording with a GUI for date/time-specific playback.
 
-- **Lane Departure Warning (LDW)** - Detects lane markings and alerts on unintended lane drift
-- **Real-time processing** - Optimized for live camera feeds
-- **Visual overlays** - Clear bounding boxes and warning annotations
-- **Configurable thresholds** - Adjustable sensitivity for different conditions
+**Accident Detection System:** Monitors G-force in real-time to detect impacts or free falls.
 
----
+**Emergency Video Reporting:** Automatically extracts footage from the moment of an accident and emails it to emergency contacts.
 
-## 📱 Demo
+**Traffic Light Approach Alert:** Uses GPS to warn drivers if they are over-speeding (>60 km/h) while approaching a traffic light.
 
-**Automatic Headlight Dimming System** - Detects oncoming headlights at night using OpenCV contour detection and brightness thresholding.
-
-### Night Driving - No Oncoming Traffic
-![Headlight NOT Detected](images/Picture1.jpg) 
-
-**Console Output**: `Headlight NOT Detected` - Headlights remain **BRIGHT** for optimal visibility.
-
-### Oncoming Vehicle Detected
-![Headlight Detected](images/Picture2.jpg) 
-
-**Console Output**: `Headlight Detected` - System automatically **DIMS** headlights to avoid blinding other drivers.
-
-### Real-World Dashboard Demo
-![In-Car Demo](images/Picture3.jpg) 
-
-**Live Processing**: System running on laptop during actual night driving, processing camera feed in real-time.
-
----
-
-### 🧠 How It Works (3-Step Pipeline)
-
-1. **Road ROI Masking** → Focus on driving area, ignore dashboard/hood
-2. **Brightness Thresholding** → Detect bright headlight regions (> threshold) 
-3. **Contour Detection** → Identify and validate oncoming vehicle headlights
-
-## 🏗️ System Architecture
-
-**Complete hardware + software ADAS system** with automatic headlight control and multi-sensor integration.
-
-![System Architecture](images/Picture4.jpg) 
+## Hardware & Tech Stack
 
 ### Hardware Components
-| Module | Purpose | Interface |
-|--------|---------|-----------|
-| **Raspberry Pi** | CV processing + control logic | GPIO/I2C |
-| **Camera** | Night driving feed | USB/MIPI |
-| **Headlight Relay** | Auto dim/bright | GPIO |
-| **Rain Sensor** | Weather detection | GPIO |
-| **Accelerometer** | Vehicle dynamics | I2C |
-| **GSM/WiFi + GPS** | Location & remote alerts | UART/USB |
+- **Microcontroller:** Raspberry Pi 5B (Chosen for integrated GPU and fast processing).
+- **Vision:** Camera Module.
+- **Sensors:** MPU6050 Accelerometer/Gyroscope, Neo 6M GPS Module.
+- **Power:** 5V Buck Converter (converts car 12V to 5V 5A).
+- **Actuators:** Relay Circuit (for headlight control).
 
-### Processing Pipeline
+### Software Libraries
+- OpenCV (Image Processing)
+- Yagmail (Automated Emailing)
+- Threading (Concurrency)
+- Tkinter (GUI for Dashcam)
 
-1. Capture frame from camera.
-2. Apply ROI masking and brightness thresholding.
-3. Find contours corresponding to oncoming headlights.
-4. Decide whether to dim or brighten the headlights.
-5. Trigger relay and update on‑screen status.
+## Modules and Implementation
 
----
+### 1. Headlight Detection & Control
 
-## 🛠️ Tech Stack
+**How it works:**  
+The system captures video frames, converts them to grayscale, and applies a trapezoid-shaped mask to focus on the road. It blurs the image to reduce noise and detects bright contours (oncoming headlights). If a bright light is detected, the system warns the driver or dims the lights.
 
-| Component   | Technology            |
-|------------|-----------------------|
-| Computer   | Raspberry Pi          |
-| Vision     | OpenCV (Python)       |
-| Logic      | Python 3              |
-| Control    | GPIO + Relay Module   |
+HTML  
+<img src="1.png" alt="Headlight Detection Output" width="600">
 
----
+**Challenges & Solutions:**  
+- **Problem:** Street lights and shop lights caused false detections.  
+  **Solution:** Implemented a Region of Interest (ROI) mask and brightness thresholds. If the ambient area is generally too bright, high beams are kept off.
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Raspberry Pi with Python 3  
-- OpenCV and NumPy installed  
-- Camera connected and working  
-
+- **Problem:** High memory usage and processing lag.  
+  **Solution:** Lowered resolution and converted frames to Black & White to speed up processing.
 
 ---
 
-## 🎯 Results
+### 2. Dashcam System
 
-- Detects oncoming vehicle headlights in real time from the front camera.
-- Automatically toggles between **BRIGHT** and **DIM** using a relay to control the headlamps.
-- Verified at night on real roads using a Raspberry Pi mounted inside the car.
+**How it works:**  
+The system continuously saves frames. A custom GUI allows the user to select a specific date and time range ("From" and "To") to view the recorded footage as a video.
 
+HTML  
+<img src="2.png" alt="Dashcam User Interface" width="400">
+<img src="2.1.png" alt="Dashcam User Interface" width="400">
 
----
-
-## 🔍 How It Works
-
-1. **Headlight Detection**  
-   - Convert frame to grayscale, apply ROI mask.  
-   - Use brightness thresholding to isolate very bright pixels.  
-   - Find contours and select candidates in the expected headlight region.
-
-2. **Decision & Control**  
-   - If a valid contour is detected, switch headlights to **DIM**.  
-   - If no oncoming headlight is present, keep or return to **BRIGHT**.  
-   - Status is shown on the processed frame window and used to drive the relay.
+**Challenges & Solutions:**  
+- **Problem:** Simultaneous video detection and converting frames to MP4 formats like .mp4 was too resource-intensive for the Pi.  
+  **Solution:** Frames are saved as individual images instead of a video file. Multi-threading is used to handle saving in the background without freezing the detection loop.
 
 ---
 
-## ⚠️ Limitations & Future Work
+### 3. Accident Detection & Reporting
 
-- Optimized for night driving; not designed for daytime or heavy glare.  
-- Assumes a fixed camera position and single forward‑facing view.  
+**How it works:**  
+Using the MPU6050 sensor via I2C communication, the system calculates the total G-force using the formula:
 
-Possible improvements:
+$$g_{total} = \sqrt{g_x^2 + g_y^2 + g_z^2}$$
 
-- Better robustness to rain/fog using additional sensors.  
-- Tuning thresholds for different cameras and vehicles.  
-- Logging and remote monitoring via GSM/Wi‑Fi and GPS.
+
+**Severity Thresholds:**  
+- 5–20g: Mild Accident  
+- 30–40g: Medium Accident  
+- 50g+: Severe Accident  
+
+If an accident is detected, the system extracts footage starting from 3 minutes prior to the incident, compiles it, and sends it via email.
+
+HTML  
+<img src="3.png" alt="Accident Detection Logic" width="500">
 
 ---
 
-## 👥 Author
+### 4. Traffic Light & Speed Monitoring
 
-**Lijaz S**
+**How it works:**  
+The system loads a database of traffic light coordinates (traffic_lights.txt). It continuously compares the vehicle's live GPS location with these coordinates. If the vehicle is within 300 meters of a light and the speed exceeds 60 km/h, an alert is triggered.
+
+HTML  
+<img src="4.png" alt="Traffic Light Detection Terminal" width="600">
 
 ---
 
-## 📄 License
+## Circuit Diagrams
 
-MIT License – see `LICENSE` for details.
+### Internal Connections
+The Raspberry Pi acts as the central hub connecting the Camera, Accelerometer, GPS, and Relay.
 
-*⭐ Star this repo if you found it useful!*
+HTML  
+<img src="5.png" alt="Internal Circuit Diagram" width="600">
+<img src="5.1.png" alt="Internal Circuit Diagram" width="600">
+
+### External Wiring
+Shows the connection between the 12V Car Battery, the Buck Converter, the Relay, and the Headlights.
+
+HTML  
+<img src="6.png" alt="External Wiring Diagram" width="600">
+
+---
+
+## Future Scope
+- Smart Dashboard: Touchscreen interface with OBD-II diagnostics  
+- Security: Motion detection alerts when the car is parked  
+- Automation: Voice commands and remote engine start  
+- Connectivity: Car-to-Home IoT integration  
+
+---
+
+## Team Members
+- Lijaz Salim  
+- Mohammed Fadil  
+- Nilofer Nissar C  
+- Wafa Nahas  
+
+**Guide:** Asst Prof. T V Rashma
